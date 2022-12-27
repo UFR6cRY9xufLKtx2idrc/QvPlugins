@@ -27,14 +27,14 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
 
     - name: Install MSVC compiler
       uses: ilammy/msvc-dev-cmd@v1
       with:
-        toolset: 14.2
+        toolset: 14.29
         arch: x64
 
     - name: Setup Ninja
@@ -43,13 +43,12 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
-        version: 6.2.0
+        version: 6.4.1
         arch: win64_msvc2019_64
-        aqtversion: ==1.2.2
 
     - name: Install Vulkan SDK
       if: matrix.platform != 'macos-latest'
-      uses: humbletim/setup-vulkan-sdk@v1.0.2
+      uses: humbletim/setup-vulkan-sdk@v1.2.0
 
     - name: Build and Install
       run: |
@@ -65,14 +64,13 @@ jobs:
       run: 7z a Plugins.7z -- build/installed/
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: QvPlugin-${{ runner.os }}.7z
         path: Plugins.7z
 
     - name: Upload to GitHub Release
       uses: svenstaro/upload-release-action@v2
-      if: github.event_name == 'release'
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: Plugins.7z
