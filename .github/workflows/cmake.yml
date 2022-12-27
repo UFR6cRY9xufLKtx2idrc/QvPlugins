@@ -13,6 +13,7 @@ on:
       - 'LICENSE'
   release:
     types: [prereleased]
+  workflow_dispatch:
 
 defaults:
   run:
